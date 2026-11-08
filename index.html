@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0E1B4D">
+  <meta name="description" content="Team Chapingo es una comunidad independiente de apoyo. Conoce y comparte propuestas para la Universidad Autónoma Chapingo.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Team Chapingo · Comunidad independiente">
+  <meta property="og:description" content="Un espacio independiente para conocer y compartir propuestas para Chapingo.">
+  <title>Team Chapingo · Apoyo independiente</title>
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+  <header class="site-header" id="siteHeader">
+    <div class="wrap nav-wrap">
+      <a class="brand" href="#inicio" aria-label="Team Chapingo, inicio">
+        <img class="brand-logo" src="assets/logo.png" alt="">
+        <span class="brand-name">Team Chapingo<small>Comunidad independiente de apoyo</small></span>
+      </a>
+      <nav class="desktop-nav" id="primaryNav" aria-label="Navegación principal">
+        <a href="#manifiesto">La comunidad</a>
+        <a href="#ejes">Seis ejes</a>
+        <a href="#metas">Metas 2031</a>
+        <a href="#agenda">100 días</a>
+        <a href="#participa">Participa</a>
+      </nav>
+      <a class="btn btn-primary nav-cta" href="#ejes">Consultar propuestas <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="primaryNav">
+        <i data-lucide="menu" aria-hidden="true"></i>
+      </button>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <section class="hero" id="inicio" aria-labelledby="heroTitle">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-orbit" aria-hidden="true"></div>
+      <svg class="hero-contours" viewBox="0 0 1000 700" aria-hidden="true">
+        <path d="M-40 550C100 390 180 730 340 560S570 310 720 470s190 150 330-15"/><path d="M-40 585C100 425 180 765 340 595S570 345 720 505s190 150 330-15"/><path d="M-40 620C100 460 180 800 340 630S570 380 720 540s190 150 330-15"/><path d="M-40 655C100 495 180 835 340 665S570 415 720 575s190 150 330-15"/><path d="M-40 515C100 355 180 695 340 525S570 275 720 435s190 150 330-15"/><path d="M-40 480C100 320 180 660 340 490S570 240 720 400s190 150 330-15"/><path d="M-40 445C100 285 180 625 340 455S570 205 720 365s190 150 330-15"/>
+      </svg>
+      <div class="wrap hero-wrap">
+        <div class="hero-copy">
+          <span class="eyebrow hero-eyebrow">Iniciativa independiente · sitio no oficial</span>
+          <h1 class="hero-title" id="heroTitle"><span>Team</span><span class="electric">Chapingo</span><span>contigo<span class="green-dot">.</span></span></h1>
+          <div class="hero-rule">Una comunidad independiente de apoyo</div>
+          <p class="hero-slogan"><strong>El futuro se construye en comunidad.</strong><br>Un espacio para conocer, conversar y compartir las propuestas del Dr. J. Reyes Altamirano Cárdenas para Chapingo.</p>
+          <p class="candidate-name">Dr. J. Reyes Altamirano Cárdenas · Candidatura a la Rectoría</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#ejes">Conoce las propuestas <i data-lucide="arrow-down" aria-hidden="true"></i></a>
+            <a class="btn btn-ghost" href="#participa">Comparte tu propuesta <i data-lucide="message-circle" aria-hidden="true"></i></a>
+          </div>
+          <div class="support-action-group">
+            <button class="btn btn-support" id="supportButton" type="button" aria-pressed="false"><i data-lucide="heart" aria-hidden="true"></i><span>Apoyar propuestas</span></button>
+            <p class="support-counter" aria-live="polite"><strong id="supportCount">0</strong> <span id="supportCountLabel">apoyos desde este navegador</span></p>
+            <small class="support-disclosure">Se guarda solo en este navegador; no es un total de la comunidad.</small>
+            <p class="support-status" id="supportStatus" role="status" aria-live="polite"></p>
+          </div>
+          <div class="hero-meta" aria-label="Resumen de la plataforma">
+            <span class="pill"><span class="pill-dot"></span>Seis ejes prioritarios</span>
+            <span class="pill">Periodo 2027—2031</span>
+            <span class="pill">Metas al 2031</span>
+          </div>
+        </div>
+        <div class="hero-visual" aria-label="Retrato proporcionado para la campaña">
+          <div class="portrait-backdrop" aria-hidden="true"></div>
+          <div class="portrait-halo" aria-hidden="true"></div>
+          <img class="candidate-portrait" src="assets/chapingo-portrait-fixed.jpg" alt="Dr. J. Reyes Altamirano Cárdenas saluda frente a un entorno arbolado">
+          <div class="portrait-caption"><span class="caption-mark" aria-hidden="true"></span><span>Dr. J. Reyes Altamirano Cárdenas<br>Candidatura a la Rectoría 2027—2031</span></div>
+        </div>
+      </div>
+      <div class="hero-bottom" aria-label="Estructura de las propuestas">
+        <div class="wrap hero-bottom-inner">
+          <div class="hero-stat"><span class="hero-stat-icon"><i data-lucide="layers-3" aria-hidden="true"></i></span><span><strong>6 ejes</strong><small>Prioridades de gestión</small></span></div>
+          <div class="hero-stat"><span class="hero-stat-icon"><i data-lucide="calendar-days" aria-hidden="true"></i></span><span><strong>2027—2031</strong><small>Periodo de candidatura</small></span></div>
+          <div class="hero-stat"><span class="hero-stat-icon"><i data-lucide="target" aria-hidden="true"></i></span><span><strong>Metas claras</strong><small>Horizonte 2031</small></span></div>
+          <div class="hero-stat"><span class="hero-stat-icon"><i data-lucide="clipboard-check" aria-hidden="true"></i></span><span><strong>Seguimiento</strong><small>Evidencia pública propuesta</small></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="manifesto" id="manifiesto" aria-labelledby="manifestoTitle">
+      <div class="wrap manifesto-grid">
+        <div class="manifesto-side reveal">
+          <div><span class="eyebrow">Una visión compartida</span><h2 class="section-heading">Chapingo merece volver a funcionar.</h2></div>
+          <div class="manifesto-mark"><span></span>Manifiesto</div>
+        </div>
+        <div class="manifesto-copy reveal">
+          <h2 id="manifestoTitle">Una Universidad que vuelva a funcionar <em>para su comunidad.</em></h2>
+          <p>Chapingo tiene una misión que exige una gestión universitaria capaz de responder: formar, investigar y servir al campo desde la excelencia académica y el compromiso social. Para cumplirla, necesitamos recuperar capacidad administrativa, atender problemas estructurales y cuidar los recursos que pertenecen a la Universidad.</p>
+          <p>Esta propuesta parte de escuchar a estudiantes, trabajadoras, trabajadores, docentes y personal administrativo. Queremos construir prioridades con la comunidad, publicar avances y dar seguimiento a compromisos concretos. La participación y el respeto a las diferencias deben ser parte de la vida universitaria.</p>
+          <div class="manifesto-quote"><span aria-hidden="true">“</span><span>El futuro se construye en comunidad: con diálogo, responsabilidad y resultados que puedan revisarse.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="diagnostic" id="diagnostico" aria-labelledby="diagnosticTitle">
+      <div class="wrap">
+        <div class="diagnostic-panel reveal">
+          <div class="diagnostic-intro">
+            <span class="eyebrow">Punto de partida</span>
+            <h2 id="diagnosticTitle">Problemas concretos requieren respuestas concretas.</h2>
+            <p>El material de campaña identifica temas que necesitan atención y documentación abierta.</p>
+          </div>
+          <div class="diagnostic-data" aria-label="Cifras incluidas en el material inicial de campaña">
+            <div class="diagnostic-item"><strong>1,516</strong><span>Becados internos reportados en el diagnóstico</span><small class="source-tag"><i data-lucide="file-question" aria-hidden="true"></i>Fuente por validar</small></div>
+            <div class="diagnostic-item"><strong>53%</strong><span>Conclusión oportuna de la Preparatoria, según material</span><small class="source-tag"><i data-lucide="file-question" aria-hidden="true"></i>Fuente por validar</small></div>
+            <div class="diagnostic-item"><strong>$0</strong><span>Inversión en equipo e infraestructura, 2024—2025</span><small class="source-tag"><i data-lucide="file-question" aria-hidden="true"></i>Fuente por validar</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="axes-section" id="ejes" aria-labelledby="axesTitle">
+      <div class="wrap">
+        <div class="section-topline reveal">
+          <div><span class="eyebrow">Propuestas de gestión</span><h2 class="section-heading" id="axesTitle">Seis ejes para poner a Chapingo en marcha.</h2><p class="section-lead">Cada eje presenta el diagnóstico inicial, el problema que se busca atender, compromisos y una meta propuesta para 2031.</p></div>
+          <div class="axes-counter" aria-label="Seis ejes prioritarios"><strong>06</strong>prioridades</div>
+        </div>
+        <div class="axes-grid" id="axesGrid" aria-live="polite"></div>
+        <p class="validation-note"><i data-lucide="info" aria-hidden="true"></i><span>Las cifras y diagnósticos de esta página corresponden al contenido inicial proporcionado por la campaña. Las fuentes documentales, fechas de consulta y observaciones metodológicas están pendientes de integración y validación interna; no se presentan como una verificación independiente.</span></p>
+      </div>
+    </section>
+
+    <section class="goals-section" id="metas" aria-labelledby="goalsTitle">
+      <div class="wrap">
+        <div class="reveal"><span class="eyebrow">Horizonte 2031</span><h2 class="section-heading" id="goalsTitle">Metas para dar seguimiento.</h2><p class="section-lead">Son objetivos propuestos para el periodo. No representan resultados alcanzados ni porcentajes de avance.</p></div>
+        <div class="goals-grid" id="goalsGrid"></div>
+        <div class="goal-footnote"><i data-lucide="circle-help" aria-hidden="true"></i><span>Las metas se muestran como compromisos futuros, sin barras de avance ni porcentajes de cumplimiento.</span></div>
+      </div>
+    </section>
+
+    <section class="agenda-section" id="agenda" aria-labelledby="agendaTitle">
+      <div class="wrap agenda-layout">
+        <div class="agenda-intro reveal">
+          <span class="eyebrow">Inicio de gestión</span>
+          <h2 class="section-heading" id="agendaTitle">Los primeros 100 días, con evidencia.</h2>
+          <p class="section-lead">Una agenda propuesta para escuchar, revisar prioridades y publicar información útil a la comunidad.</p>
+          <span class="agenda-badge"><i aria-hidden="true"></i>Agenda propuesta · no ejecutada</span>
+        </div>
+        <div class="timeline reveal" id="timeline"></div>
+      </div>
+    </section>
+
+    <section class="participate-section" id="participa" aria-labelledby="participateTitle">
+      <div class="wrap participate-layout">
+        <div class="participate-copy reveal">
+          <span class="eyebrow">Participación voluntaria</span>
+          <h2 id="participateTitle">La Universidad se construye con la participación de su comunidad.</h2>
+          <p>Comparte tus propuestas y, si así lo deseas, solicita información sobre las actividades de esta iniciativa.</p>
+          <div class="participate-note"><i data-lucide="shield-check" aria-hidden="true"></i><span>No pedimos nombre, correo ni teléfono. Tu propuesta solo se comparte si tú eliges una aplicación; esta página no la recibe.</span></div>
+        </div>
+        <div class="form-shell reveal">
+          <p class="form-intro">Participar es opcional. Escribe una idea breve o deja el campo vacío y comparte desde tu dispositivo.</p>
+          <form id="participationForm">
+            <div class="form-grid">
+              <div class="field field-full"><label for="comments">Tu propuesta <span>(opcional)</span></label><textarea id="comments" name="comments" maxlength="800" placeholder="¿Qué te gustaría ver en Chapingo?"></textarea></div>
+            </div>
+            <div class="form-actions"><button class="btn btn-primary" id="submitButton" type="submit">Compartir propuesta <i data-lucide="share-2" aria-hidden="true"></i></button><small>Tu texto no se envía a este sitio. Tú eliges dónde compartirlo.</small></div>
+            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-main">
+        <div>
+          <div class="footer-brand"><img class="brand-logo" src="assets/logo.png" alt=""><div><h2>Team Chapingo</h2><p>Comunidad independiente de apoyo al Dr. J. Reyes Altamirano Cárdenas.<br>El futuro se construye en comunidad.</p></div></div>
+          <p class="footer-notice">Team Chapingo es una iniciativa independiente de apoyo. No es un sitio oficial de la Universidad Autónoma Chapingo ni está afiliado institucionalmente. Las propuestas y metas aquí reunidas se presentan como propuestas asociadas a la candidatura del Dr. J. Reyes Altamirano Cárdenas; no son comunicados oficiales de la Universidad.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Navegación secundaria"><a href="#manifiesto">La comunidad</a><a href="#ejes">Seis ejes</a><a href="#metas">Metas 2031</a><a href="#agenda">Primeros 100 días</a><a href="#participa">Participación</a><button type="button" id="footerPrivacy">Privacidad</button></nav>
+      </div>
+      <div class="footer-bottom"><span>TEAM CHAPINGO · COMUNIDAD INDEPENDIENTE</span><span>Iniciativa no oficial</span></div>
+    </div>
+  </footer>
+
+  <dialog id="privacyDialog" aria-labelledby="privacyTitle">
+    <div class="dialog-inner" id="aviso">
+      <div class="dialog-top"><div><span class="eyebrow">Privacidad</span><h2 id="privacyTitle">Cómo se manejan tus datos</h2></div><button class="dialog-close" type="button" id="closePrivacy" aria-label="Cerrar aviso"><i data-lucide="x" aria-hidden="true"></i></button></div>
+      <p class="draft-alert">Esta página no solicita ni almacena datos personales en un servidor.</p>
+      <h3>Apoyo desde este navegador</h3><p>Si eliges “Apoyar propuestas”, se guarda una preferencia local en este navegador para recordar tu selección. No se transmite ni se suma a un contador comunitario.</p>
+      <h3>Propuestas</h3><p>El texto que escribas permanece en tu dispositivo. Al compartir, se abrirá la función de compartir del dispositivo o se copiará el texto para que tú decidas dónde enviarlo. Esta página no recibe tu propuesta.</p>
+      <p>Team Chapingo es una comunidad independiente y no oficial.</p>
+      <button class="btn btn-primary" type="button" id="closePrivacyAction">Entendido</button>
+    </div>
+  </dialog>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>
