@@ -7,7 +7,8 @@
     "node": ">=20.19.0"
   },
   "scripts": {
-    "dev": "concurrently -k -n web,api \"vite --host 0.0.0.0\" \"node server/index.js\"",
+    "dev": "vite build",
+    "dev:local": "concurrently -k -n web,api \"vite --host 0.0.0.0\" \"node server/index.js\"",
     "build": "vite build",
     "start": "node server/index.js"
   },
@@ -21,7 +22,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.3.0",
-    "concurrently": "^10.0.7",
+    "concurrently": "^9.2.5",
     "vite": "^8.3.8"
   }
 }
