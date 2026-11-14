@@ -1,7 +1,14 @@
     (() => {
       "use strict";
 
-      const SUPPORT_STORAGE_KEY = "teamChapingoSupport";
+      const strategicGoals = [
+        { value: "2,000", description: "Becados internos", axis: "Eje 01 · Estudiantes al centro", icon: "graduation-cap" },
+        { value: "7 de cada 10", description: "Concluyen la Preparatoria a tiempo", axis: "Eje 02 · Formación de excelencia", icon: "book-open-check" },
+        { value: "80%", description: "De edificios accesibles", axis: "Eje 03 · Universidad segura", icon: "accessibility" },
+        { value: "5%", description: "Del gasto destinado a mantenimiento", axis: "Eje 04 · Infraestructura", icon: "building-2" },
+        { value: "8 sedes", description: "Con servicio de Propedéutico", axis: "Eje 05 · Presencia regional", icon: "map-pinned" },
+        { value: "0 hectáreas perdidas", description: "Protección del patrimonio universitario", axis: "Eje 09 · Patrimonio", icon: "trees" }
+      ];
 
       // Contenido inicial proporcionado por la campaña. Fuentes y metodología pendientes de validar.
       const axes = [
@@ -121,13 +128,16 @@
         return card;
       }
 
-      function buildGoalCard(axis) {
+      function buildGoalCard(goal) {
         const card = document.createElement("article");
         card.className = "goal-card reveal";
-        card.setAttribute("aria-label", `Eje ${axis.number}: meta al 2031, ${axis.goal}`);
-        card.append(makeText("strong", axis.goal, "goal-number"));
-        card.append(makeText("span", `Eje ${axis.number} · ${axis.category}`, "goal-axis"));
-        card.append(makeText("span", axis.indicator, "goal-description"));
+        card.setAttribute("aria-label", `${goal.axis}: ${goal.value}, ${goal.description}`);
+        const cardIcon = document.createElement("span");
+        cardIcon.className = "goal-icon";
+        cardIcon.append(icon(goal.icon));
+        card.append(cardIcon, makeText("strong", goal.value, "goal-number"));
+        card.append(makeText("span", goal.description, "goal-description"));
+        card.append(makeText("span", goal.axis, "goal-axis"));
         return card;
       }
 
@@ -151,7 +161,7 @@
         const goalsGrid = document.getElementById("goalsGrid");
         const timeline = document.getElementById("timeline");
         axesGrid.replaceChildren(...axes.map(buildAxisCard));
-        goalsGrid.replaceChildren(...axes.map(buildGoalCard));
+        goalsGrid.replaceChildren(...strategicGoals.map(buildGoalCard));
         timeline.replaceChildren(...agenda.map(buildTimelineItem));
         const disclaimer = makeText("p", "La secuencia y las evidencias descritas son propuestas de seguimiento; no indican que estas acciones ya se hayan realizado.", "agenda-disclaimer");
         timeline.append(disclaimer);
@@ -170,28 +180,47 @@
         const nav = document.getElementById("primaryNav");
         const toggle = document.getElementById("menuToggle");
         const navLinks = [...nav.querySelectorAll("a[href^='#']")];
+        const allNavLinks = [...nav.querySelectorAll("a")];
         const sectionTargets = navLinks.map((link) => document.querySelector(link.getAttribute("href"))).filter(Boolean);
+        const mobileQuery = window.matchMedia("(max-width: 800px)");
 
-        const closeMenu = () => {
+        const closeMenu = (restoreFocus = false) => {
+          const wasOpen = nav.classList.contains("is-open");
           nav.classList.remove("is-open");
           document.body.classList.remove("menu-open");
           toggle.setAttribute("aria-expanded", "false");
           toggle.setAttribute("aria-label", "Abrir menú");
           toggle.replaceChildren(icon("menu"));
+          nav.inert = mobileQuery.matches;
+          nav.setAttribute("aria-hidden", String(mobileQuery.matches));
           refreshIcons();
+          if (restoreFocus && wasOpen) toggle.focus();
         };
 
         toggle.addEventListener("click", () => {
-          const isOpen = nav.classList.toggle("is-open");
-          document.body.classList.toggle("menu-open", isOpen);
-          toggle.setAttribute("aria-expanded", String(isOpen));
-          toggle.setAttribute("aria-label", isOpen ? "Cerrar menú" : "Abrir menú");
-          toggle.replaceChildren(icon(isOpen ? "x" : "menu"));
+          if (nav.classList.contains("is-open")) {
+            closeMenu();
+            return;
+          }
+          nav.classList.add("is-open");
+          document.body.classList.add("menu-open");
+          nav.inert = false;
+          nav.setAttribute("aria-hidden", "false");
+          toggle.setAttribute("aria-expanded", "true");
+          toggle.setAttribute("aria-label", "Cerrar menú");
+          toggle.replaceChildren(icon("x"));
           refreshIcons();
+          nav.querySelector("a")?.focus();
         });
 
-        navLinks.forEach((link) => link.addEventListener("click", closeMenu));
-        document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeMenu(); });
+        allNavLinks.forEach((link) => link.addEventListener("click", () => closeMenu()));
+        document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeMenu(true); });
+        document.addEventListener("click", (event) => {
+          if (nav.classList.contains("is-open") && !header.contains(event.target)) closeMenu();
+        });
+        if (typeof mobileQuery.addEventListener === "function") mobileQuery.addEventListener("change", () => closeMenu());
+        else mobileQuery.addListener(() => closeMenu());
+        closeMenu();
         window.addEventListener("scroll", () => header.classList.toggle("is-scrolled", window.scrollY > 24), { passive: true });
 
         if ("IntersectionObserver" in window) {
@@ -243,90 +272,294 @@
         status.className = `form-status is-${state}`;
       }
 
-      function setupSupport() {
-        const button = document.getElementById("supportButton");
-        const count = document.getElementById("supportCount");
-        const countLabel = document.getElementById("supportCountLabel");
-        const status = document.getElementById("supportStatus");
-        let isSupported = false;
-
-        try { isSupported = window.localStorage.getItem(SUPPORT_STORAGE_KEY) === "1"; } catch { /* El apoyo sigue funcionando en memoria. */ }
-
-        const render = () => {
-          count.textContent = isSupported ? "1" : "0";
-          countLabel.textContent = isSupported ? "apoyo desde este navegador" : "apoyos desde este navegador";
-          button.setAttribute("aria-pressed", String(isSupported));
-          button.querySelector("span").textContent = isSupported ? "Quitar mi apoyo" : "Apoyar propuestas";
-          button.classList.toggle("is-supported", isSupported);
-        };
-
-        render();
-        button.addEventListener("click", () => {
-          isSupported = !isSupported;
-          let saved = true;
-          try {
-            if (isSupported) window.localStorage.setItem(SUPPORT_STORAGE_KEY, "1");
-            else window.localStorage.removeItem(SUPPORT_STORAGE_KEY);
-          } catch { saved = false; }
-          render();
-          count.classList.remove("is-animated");
-          void count.offsetWidth;
-          count.classList.add("is-animated");
-          status.textContent = isSupported
-            ? saved ? "Gracias. Tu apoyo quedó guardado en este navegador." : "Gracias. Tu apoyo se muestra solo durante esta visita."
-            : "Quitaste tu apoyo de este navegador.";
-          status.classList.remove("is-visible");
-          requestAnimationFrame(() => status.classList.add("is-visible"));
-        });
-      }
-
       function setupForm() {
         const form = document.getElementById("participationForm");
+        const authorName = document.getElementById("authorName");
         const comments = document.getElementById("comments");
+        const website = document.getElementById("website");
+        const publishConsent = document.getElementById("publishConsent");
+        const submitButton = document.getElementById("submitButton");
+        let isSubmitting = false;
 
         form.addEventListener("submit", async (event) => {
           event.preventDefault();
+          if (isSubmitting) return;
           const proposal = comments.value.trim();
-          if (!proposal) {
-            setFormStatus("Escribe una idea breve o usa el botón de apoyo de arriba.", "info");
+          const author = authorName ? (authorName.value.trim() || "Anónimo") : "Anónimo";
+          const characterCount = [...proposal].length;
+          if (characterCount < 10 || characterCount > 800) {
+            setFormStatus("Escribe una propuesta de entre 10 y 800 caracteres.", "info");
             comments.focus();
+            return;
+          }
+          if (!publishConsent.checked) {
+            setFormStatus("Acepta que tu propuesta sea publicada para poder enviarla.", "info");
+            publishConsent.focus();
             return;
           }
 
           try {
-            if (navigator.share) {
-              await navigator.share({ title: "Propuesta para Chapingo", text: proposal });
-              setFormStatus("Tu dispositivo abrió las opciones para compartir. Esta página no recibe el texto.", "success");
-              return;
-            }
+            isSubmitting = true;
+            submitButton.disabled = true;
+            const response = await fetch("api/proposals.php", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Accept: "application/json" },
+              body: JSON.stringify({
+                author,
+                proposal,
+                publishConsent: publishConsent.checked,
+                website: website.value
+              })
+            });
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(result.message || "No se pudo enviar la propuesta.");
+            form.reset();
+            setFormStatus(result.message || "¡Gracias! Tu propuesta ha sido publicada con éxito.", "success");
           } catch (error) {
-            if (error && error.name === "AbortError") {
-              setFormStatus("No se compartió. Tu texto sigue en el campo.", "info");
-              return;
-            }
-          }
-
-          try {
-            await navigator.clipboard.writeText(proposal);
-            setFormStatus("Propuesta copiada. Pégala en la aplicación donde quieras compartirla.", "success");
-          } catch {
-            comments.focus();
-            comments.select();
-            setFormStatus("Seleccionamos el texto; cópialo para compartirlo desde la aplicación que prefieras.", "info");
+            const message = error instanceof TypeError
+              ? "No se pudo conectar con el registro. Revisa que api/proposals.php esté instalado y MySQL esté configurado."
+              : error.message || "No se pudo enviar la propuesta. Inténtalo de nuevo.";
+            setFormStatus(message, "error");
+          } finally {
+            isSubmitting = false;
+            submitButton.disabled = false;
           }
         });
+      }
+
+      function setupCommunityVote() {
+        const SUPPORT_TOKEN_KEY = "teamChapingoSupportToken";
+        const GENERAL_VOTE_KEY = "teamChapingoGeneralVote";
+        const VOTES_API = "api/votes.php";
+
+        const countEl = document.getElementById("communityVoteCount");
+        const mainBtn = document.getElementById("mainVoteButton");
+        const mainBtnText = document.getElementById("mainVoteBtnText");
+        const badgeInc = document.getElementById("voteIncBadge");
+        const statusFeedback = document.getElementById("voteStatusFeedback");
+        const heroBtn = document.getElementById("heroVoteBtn");
+        const ambientContainer = document.getElementById("voteAmbientHearts");
+
+        if (!countEl || !mainBtn) return;
+
+        let totalVotes = 376;
+        let hasVoted = false;
+        let browserToken = "";
+
+        try {
+          browserToken = window.localStorage.getItem(SUPPORT_TOKEN_KEY) || "";
+          if (!browserToken) {
+            browserToken = typeof crypto?.randomUUID === "function"
+              ? crypto.randomUUID()
+              : "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) =>
+                  (+c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (+c / 4)))).toString(16)
+                );
+            window.localStorage.setItem(SUPPORT_TOKEN_KEY, browserToken);
+          }
+          hasVoted = window.localStorage.getItem(GENERAL_VOTE_KEY) === "1";
+        } catch {
+          // localStorage no disponible
+        }
+
+        const formatNumber = (num) => new Intl.NumberFormat("es-MX").format(num);
+
+        const updateDisplay = () => {
+          countEl.textContent = formatNumber(totalVotes);
+          if (hasVoted) {
+            mainBtn.classList.add("is-voted");
+            mainBtn.disabled = true;
+            mainBtn.setAttribute("aria-pressed", "true");
+            if (mainBtnText) mainBtnText.textContent = "¡Ya votaste!";
+            if (statusFeedback) {
+              statusFeedback.textContent = "¡Muchas gracias por apoyar a Chapingo!";
+              statusFeedback.classList.add("is-visible");
+            }
+          }
+        };
+
+        const fetchVotes = async () => {
+          try {
+            const url = browserToken ? `${VOTES_API}?token=${encodeURIComponent(browserToken)}` : VOTES_API;
+            const res = await fetch(url, { headers: { Accept: "application/json" } });
+            if (!res.ok) return;
+            const data = await res.json();
+            if (data.ok && Number.isSafeInteger(data.total)) {
+              totalVotes = Math.max(totalVotes, data.total);
+              if (data.supported) hasVoted = true;
+              updateDisplay();
+            }
+          } catch {
+            // Silencioso; usa datos locales
+          }
+        };
+
+        const heartColors = [
+          "#00B050", // Verde Chapingo
+          "#44D487", // Verde claro
+          "#FF3366", // Rosa vivo
+          "#FF5252", // Rojo coral
+          "#FFB800", // Oro
+          "#2D52EC", // Azul eléctrico
+          "#A855F7"  // Púrpura suave
+        ];
+
+        const spawnHeartExplosion = (sourceEl) => {
+          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+          const rect = sourceEl ? sourceEl.getBoundingClientRect() : null;
+          const originX = rect ? rect.left + rect.width / 2 : window.innerWidth / 2;
+          const originY = rect ? rect.top + rect.height / 2 : window.innerHeight / 2;
+
+          const count = 22;
+          for (let i = 0; i < count; i++) {
+            const heart = document.createElement("div");
+            heart.className = "flying-heart-particle";
+
+            const size = Math.floor(Math.random() * 18) + 16;
+            const color = heartColors[Math.floor(Math.random() * heartColors.length)];
+            const xShift1 = (Math.random() - 0.5) * 60;
+            const xShift2 = (Math.random() - 0.5) * 140;
+            const xShift3 = (Math.random() - 0.5) * 220;
+            const rot1 = (Math.random() - 0.5) * 35;
+            const rot2 = (Math.random() - 0.5) * 65;
+            const rot3 = (Math.random() - 0.5) * 90;
+            const duration = (Math.random() * 0.4 + 1.2).toFixed(2);
+            const delay = (Math.random() * 0.12).toFixed(2);
+
+            heart.style.cssText = `
+              left: ${originX - size / 2}px;
+              top: ${originY - size / 2}px;
+              width: ${size}px;
+              height: ${size}px;
+              --x-shift-1: ${xShift1}px;
+              --x-shift-2: ${xShift2}px;
+              --x-shift-3: ${xShift3}px;
+              --rot-1: ${rot1}deg;
+              --rot-2: ${rot2}deg;
+              --rot-3: ${rot3}deg;
+              animation-duration: ${duration}s;
+              animation-delay: ${delay}s;
+            `;
+
+            heart.innerHTML = `
+              <svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="${color}" style="display:block;">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+            `;
+
+            document.body.appendChild(heart);
+            heart.addEventListener("animationend", () => heart.remove(), { once: true });
+          }
+        };
+
+        const setupAmbient = () => {
+          if (!ambientContainer || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+          const spawnAmbientHeart = () => {
+            if (document.hidden) return;
+            const heart = document.createElement("div");
+            heart.className = "ambient-heart";
+            const size = Math.floor(Math.random() * 16) + 14;
+            const color = heartColors[Math.floor(Math.random() * heartColors.length)];
+            const left = Math.random() * 92 + 4;
+            const driftX = (Math.random() - 0.5) * 80;
+            const rot = (Math.random() - 0.5) * 50;
+            const opacity = (Math.random() * 0.16 + 0.16).toFixed(2);
+            const duration = (Math.random() * 4 + 7).toFixed(1);
+
+            heart.style.cssText = `
+              left: ${left}%;
+              width: ${size}px;
+              height: ${size}px;
+              --drift-x: ${driftX}px;
+              --rot-deg: ${rot}deg;
+              --ambient-op: ${opacity};
+              animation-duration: ${duration}s;
+            `;
+
+            heart.innerHTML = `
+              <svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="${color}" style="display:block;">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+            `;
+
+            ambientContainer.appendChild(heart);
+            heart.addEventListener("animationend", () => heart.remove(), { once: true });
+          };
+
+          for (let i = 0; i < 4; i++) {
+            setTimeout(spawnAmbientHeart, i * 600);
+          }
+          setInterval(spawnAmbientHeart, 1600);
+        };
+
+        const handleVoteClick = async (sourceElement) => {
+          if (hasVoted) return; // ← Un solo voto por persona
+
+          spawnHeartExplosion(sourceElement || mainBtn);
+
+          if (badgeInc) {
+            badgeInc.classList.remove("is-floating");
+            void badgeInc.offsetWidth;
+            badgeInc.classList.add("is-floating");
+          }
+
+          totalVotes += 1;
+          hasVoted = true;
+
+          countEl.classList.remove("is-animating");
+          void countEl.offsetWidth;
+          countEl.classList.add("is-animating");
+
+          updateDisplay();
+
+          try {
+            window.localStorage.setItem(GENERAL_VOTE_KEY, "1");
+          } catch {}
+
+          try {
+            const res = await fetch(VOTES_API, {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Accept: "application/json" },
+              body: JSON.stringify({ action: "vote", token: browserToken })
+            });
+            if (res.ok) {
+              const data = await res.json();
+              if (data.ok && Number.isSafeInteger(data.total)) {
+                totalVotes = Math.max(totalVotes, data.total);
+                updateDisplay();
+              }
+            }
+          } catch {
+            // Guardado local exitoso
+          }
+        };
+
+        mainBtn.addEventListener("click", () => handleVoteClick(mainBtn));
+
+        if (heroBtn) {
+          heroBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            handleVoteClick(heroBtn);
+            const target = document.getElementById("votar");
+            if (target) {
+              target.scrollIntoView({ behavior: "smooth" });
+            }
+          });
+        }
+
+        updateDisplay();
+        fetchVotes();
+        setupAmbient();
       }
 
       function initialize() {
         renderContent();
         setupNavigation();
         setupPrivacyDialog();
-        setupSupport();
+        setupCommunityVote();
         setupForm();
         refreshIcons();
         observeReveals();
       }
 
-      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initialize, { once: true });
-      else initialize();
+      window.teamChapingoInitializeMain = initialize;
     })();

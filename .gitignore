@@ -1,0 +1,6 @@
+/api/config.php
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
